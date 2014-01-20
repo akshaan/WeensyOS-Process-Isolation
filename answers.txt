@@ -1,0 +1,20 @@
+Name:
+UCLA ID:
+
+
+-------------------------------------------------------------------------------
+
+Response to Exercise 1:
+
+Replacing the call to run(current) with schedule() in the INT_SYS_GETPID clause will not cause a wrong return value from the sys_getpid() system call as long as the user processes do not overwrite the kernel stack. This is because the after the call to sys_getpid() issues the trap, the kernel stores the current states of all registers so that when we return to the current process, it can resume execution from where it left off. Therefore, after the call to schedule runs all the other runnable processes, the value of the %eax register which was stored on the kernel stack will still be the pid of the original process that called sys_getpid(). But since in the WeensyOS, the kernel and user prcocesses share the same address space, it is possible that the user process will overwrite the kernel stack if something goes wrong. In this case, the system call will no longer return the right value since the stord value of %eax might have been altered.
+
+
+Response to Excercise 3:
+
+Instead of adding a field to the process descriptor, I made use of the P_BLOCKED option for the p_state field of the descriptor. Instead of having the INT_SYS_WAIT clause return WAIT_TRYAGAIN, I changed the code so that the p_state field of the calling process is changed to P_BLOCKED. In the INT_SYS_EXIT clause of the interrupt() function, I added a for loop that iterates through the proc_array[] and finds every process whose p_state field is P_BLOCKED and changes it to P_RUNNABLE.
+
+Anything else you'd like us to know:
+
+
+
+Extra credit exercises:
