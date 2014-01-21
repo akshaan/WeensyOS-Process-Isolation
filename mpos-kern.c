@@ -171,7 +171,7 @@ interrupt(registers_t *reg)
 		current->p_state = P_ZOMBIE;
 		current->p_exit_status = current->p_registers.reg_eax;
 		int i =0;
-		for(i = 0; i <NPROCS; i++)
+		for(i = 1; i <NPROCS; i++)
 		{
 			if(proc_array[i].p_state == P_BLOCKED)
 				proc_array[i].p_state = P_RUNNABLE;
@@ -336,7 +336,7 @@ copy_stack(process_t *dest, process_t *src)
 
 	// YOUR CODE HERE: memcpy the stack and set dest->p_registers.reg_esp
 	size_t size = src_stack_top - src_stack_bottom;
-	memcpy((void*)src_stack_bottom,(void*)dest_stack_bottom,size);
+	memcpy((void*)dest_stack_bottom,(void*)src_stack_bottom,size);
 	dest->p_registers.reg_esp = dest_stack_bottom;
 		
 		

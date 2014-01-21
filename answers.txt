@@ -18,3 +18,29 @@ Anything else you'd like us to know:
 
 
 Extra credit exercises:
+
+Response to Excercise 5:
+
+A piece of code that will print 10 on a system with correct process isolation but 11 on MinprocOS is :
+
+
+void
+start(void)
+{
+        int x = 0;
+        /* YOUR CODE HERE */
+        int *volatile y = &x;
+        pid_t p = sys_fork();
+        /* YOUR CODE HERE */
+        if(p == 0){
+        *y = 1;
+        x = 1;
+        }
+        else if (p > 0)
+                sys_wait(p);
+        app_printf("%d",x);
+        sys_exit(0);
+}
+
+
+This is because, since the stack for the parent is copied directly to the child, a pointer reference to an integer will copy the same address from parent to child. Therefore when the child process is run, we assign the childs local variable x with the value 1 and also the variable that y points to, which is the variable x on the parents stack. Thus both processes print 1. The pointer y points to a volatile int so that the compiler does not optimize the assignment of the actual integer. On an OS with correct process isolation, the pointer passed to the child processes stack would point to the child's own copy of the local variable x and not the parent copy on the parent's stach.
