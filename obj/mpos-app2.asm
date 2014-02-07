@@ -77,9 +77,11 @@ run_child(void)
 	pid_t pid;
 	asm volatile("int %1\n"
   200054:	cd 30                	int    $0x30
-				   space, so this change to 'counter' will be
-				   visible to all processes. */
+		}
 
+	}
+*/	
+	
 	app_printf("Process %d lives, counter %d!\n",
   200056:	53                   	push   %ebx
   200057:	50                   	push   %eax
